@@ -1,0 +1,162 @@
+using System;
+
+public interface IBeverage
+{
+    double Cost();
+    string GetDescription();
+}
+
+public class Espresso : IBeverage
+{
+    public double Cost()
+    {
+        return 50.0;
+    }
+
+    public string GetDescription()
+    {
+        return "Espresso";
+    }
+}
+
+public class Tea : IBeverage
+{
+    public double Cost()
+    {
+        return 30.0;
+    }
+
+    public string GetDescription()
+    {
+        return "Tea";
+    }
+}
+
+public class Latte : IBeverage
+{
+    public double Cost()
+    {
+        return 60.0;
+    }
+
+    public string GetDescription()
+    {
+        return "Latte";
+    }
+}
+
+public class Mocha : IBeverage
+{
+    public double Cost()
+    {
+        return 70.0;
+    }
+
+    public string GetDescription()
+    {
+        return "Mocha";
+    }
+}
+
+public abstract class BeverageDecorator : IBeverage
+{
+    protected IBeverage _beverage;
+
+    public BeverageDecorator(IBeverage beverage)
+    {
+        _beverage = beverage;
+    }
+
+    public virtual double Cost()
+    {
+        return _beverage.Cost();
+    }
+
+    public virtual string GetDescription()
+    {
+        return _beverage.GetDescription();
+    }
+}
+
+public class Milk : BeverageDecorator
+{
+    public Milk(IBeverage beverage) : base(beverage) {}
+
+    public override double Cost()
+    {
+        return base.Cost() + 10.0;
+    }
+
+    public override string GetDescription()
+    {
+        return base.GetDescription() + ", Milk";
+    }
+}
+
+public class Sugar : BeverageDecorator
+{
+    public Sugar(IBeverage beverage) : base(beverage) {}
+
+    public override double Cost()
+    {
+        return base.Cost() + 5.0;
+    }
+
+    public override string GetDescription()
+    {
+        return base.GetDescription() + ", Sugar";
+    }
+}
+
+public class WhippedCream : BeverageDecorator
+{
+    public WhippedCream(IBeverage beverage) : base(beverage) {}
+
+    public override double Cost()
+    {
+        return base.Cost() + 15.0;
+    }
+
+    public override string GetDescription()
+    {
+        return base.GetDescription() + ", Whipped Cream";
+    }
+}
+
+public class Syrup : BeverageDecorator
+{
+    public Syrup(IBeverage beverage) : base(beverage) {}
+
+    public override double Cost()
+    {
+        return base.Cost() + 12.0;
+    }
+
+    public override string GetDescription()
+    {
+        return base.GetDescription() + ", Syrup";
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        IBeverage beverage = new Espresso();
+        Console.WriteLine($"{beverage.GetDescription()}: {beverage.Cost()}");
+
+        beverage = new Milk(beverage);
+        Console.WriteLine($"{beverage.GetDescription()}: {beverage.Cost()}");
+
+        beverage = new Sugar(beverage);
+        Console.WriteLine($"{beverage.GetDescription()}: {beverage.Cost()}");
+
+        beverage = new WhippedCream(beverage);
+        Console.WriteLine($"{beverage.GetDescription()}: {beverage.Cost()}");
+
+        IBeverage mocha = new Mocha();
+        mocha = new Syrup(mocha);
+        mocha = new Milk(mocha);
+        Console.WriteLine($"{mocha.GetDescription()}: {mocha.Cost()}");
+    }
+}
